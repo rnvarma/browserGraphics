@@ -1,1 +1,1 @@
-web: gunicorn browser112.wsgi:application
+web: gunicorn browser112.wsgi --log-file -
