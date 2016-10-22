@@ -1,0 +1,1 @@
+web: gunicorn browser112.wsgi:application
