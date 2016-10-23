@@ -84,7 +84,117 @@
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
-        <div id="editor">{{ code }}</div>
+        <div id="editor">{% if code %}{{ code }}{% else %}// =========================================================================
+// =                    Welcome to Browser Graphics!                       =
+// =========================================================================
+
+// This is a platform intended to easily allow introductory level programmers
+// to write animations that they can share share with the world! It is designed
+// for students taking the 15-112 intro to CS course in python which
+// can be found here: www.cs.cmu.edu/~112/
+
+// The programming paradigm is based on event-based animation which
+// you can read more of here: 
+// http://www.cs.cmu.edu/~112/notes/notes-animations.html
+
+// HOW TO USE:
+//      Simply write your code in this editor.
+//      
+//      RUNNING CODE: 
+//          Either press the "Run" button or do "ctrl/cmd-B".
+//
+//      SAVING CODE:
+//          To save a project, press the "save" or do "ctrl/cmd-S"
+//
+//          The first time you save it will ask you for a project name
+//          as well as a password. Once you enter in the information you
+//          will be redirect to your unique project-url which you will
+//          use at 
+//
+//                  browsergraphics.com/-project_name-/edit.
+//
+//          The URL will ask you for the password before allowing you
+//          to edit, meaning that only you or people with the password will
+//          be allowed to edit.
+//
+//          One you have created a project, subsequent saves will just
+//          save the code to your project, the URL will not change.
+//
+//      SHARING PROJECT:
+//          To share your project with your friends and family, simply link
+//          them to the url:
+//              
+//                  browsergraphics.com/-project_name-
+//
+//          This will get rid of the editting functionality and be a full
+//          screen web animation for you to show off :)
+
+function init(data) {
+    // initialize your data here! data is an empty object you can
+    // put whatever you want in it.
+    data.cx = 150;
+    data.cy = 150;
+    data.r = 100;
+    data.cv = 5;
+    data.rectX = 300;
+    data.rectY = 200;
+    data.rectW = 100;
+    data.rectH = 100;
+    data.rv = 5;
+    data.x = data.width / 2;
+    data.y = data.height / 2;
+    data.framesSkip = 1
+    console.log(data);
+}
+
+function timerFired(data, frameCount) {
+    // called in a loop a certain number of times per second based
+    // on this formula: 60 / data.framesSkip.
+    // data.frameSkip is initialized to 20 so timerFired is called 3
+    // times per second be default. Change data.frameSkip if necessary
+    data.cx += data.cv;
+    if (data.cx + data.r > data.width || data.cx - data.r < 0) data.cv *= -1;
+    data.rectY += data.rv;
+    if (data.rectY + data.rectH > data.height || data.rectY < 0) data.rv *= -1;
+}
+
+function mousePressed(data, event) {
+    // fired when a click event on the canvas occurs.
+    // the event variable has a lot, but most useful is event.x and event.y
+    var x = event.x;
+    var y = event.y;
+    var cx = data.cx;
+    var cy = data.cy;
+    var r = data.r;
+    var d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5;
+    if (d < r) data.cv *= -1;
+}
+
+function keyPressed(data, event) {
+    // fired whenever the user uses the key board
+    // print out event to see all the click event details, but
+    // most useful is event.key and event.keycode
+    if (event.key == "ArrowUp") {
+        data.y -= 20;
+    } else if (event.key == "ArrowDown") {
+        data.y += 20;
+    } else if (event.key == "ArrowLeft") {
+        data.x -= 20;
+    } else if (event.key == "ArrowRight") {
+        data.x += 20;
+    }
+}
+
+function redrawAll(data) {
+    // do the drawing here! This is called whenever an event fires for
+    // mouse/click and also on each timerFired call.
+    create_oval(data.cx-data.r, data.cy-data.r, data.cx+data.r,
+        data.cy+data.r, {fill: '#FF8000', outlineColor: 'orangered', outline: 5})
+    create_rect(data.rectX, data.rectY, data.rectX + data.rectW,
+        data.rectY + data.rectH, {fill: 'rgba(0, 200, 255, 0.75)', outlineColor: '#1C75BC'})
+    create_oval(data.x-data.r, data.y-data.r, data.x+data.r,
+        data.y+data.r, {fill: '#FF0000', outlineColor: 'red', outline: 5})
+}{% endif %}</div>
         <div id="canvas"></div>
         <div id="click-layer"></div>
         <div id="uuid" data-uuid="{{uuid}}"></div>
