@@ -25,6 +25,80 @@ function runCode(editor) {
     $("body").append(code);
 }
 
+function saveCode(editor) {
+  var givenuuid = $("#uuid").attr("data-uuid");
+  if (!givenuuid) {
+    $("#saveModal").click();
+  } else {
+    $.ajax({
+      type: "POST",
+      url: '/save',
+      beforeSend: function (xhr) {
+        xhr.withCredentials = true;
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      },
+      data: {
+        code: editor.getValue(),
+        uuid: givenuuid
+      },
+      success: function(uuid) {
+        console.log("saved!");
+      },
+    });
+  }
+}
+
+$(document).ready(function() {
+  $("#program-name").bind("change paste keyup", function(e) {
+    var name = $(this).val();
+    var elem = $(this);
+    if (!name) {
+      elem.parent().addClass("has-error")
+      elem.parent().removeClass("has-success")
+      return;
+    }
+    $.ajax({
+      type: "POST",
+      url: '/checkname',
+      beforeSend: function (xhr) {
+        xhr.withCredentials = true;
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      },
+      data: {
+        name: name
+      },
+      success: function(isTaken) {
+        if (isTaken == "False") {
+          elem.parent().addClass("has-success");
+          elem.parent().removeClass("has-error");
+        } else {
+          elem.parent().addClass("has-error")
+          elem.parent().removeClass("has-success")
+        }
+      },
+    });
+  });
+
+  $("#saveModalSaveBtn").click(function() {
+    if (!$("#program-name").parent().hasClass("has-error")) {
+      console.log($("#program-name").val());
+      $.ajax({
+        type: "POST",
+        url: '/save',
+        data: {
+          code: editor.getValue(),
+          uuid: $("#program-name").val(),
+          password: $("#program-pw").val(),
+        },
+        success: function(uuid) {
+          window.location.href = '/' + uuid + '/edit';
+        },
+      });
+    }
+  })
+})
+
+
 editor.commands.addCommand({
     name: 'build',
     bindKey: {win: 'Ctrl-B',  mac: 'Command-B'},
@@ -32,25 +106,11 @@ editor.commands.addCommand({
     readOnly: false // false if this command should not apply in readOnly mode
 });
 
+
 editor.commands.addCommand({
     name: 'save',
     bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
-    exec: function(editor) {
-        $.ajax({
-          type: "POST",
-          url: '/save',
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          data: {
-            code: editor.getValue()
-          },
-          success: function(uuid) {
-            window.location.href = '/' + uuid + '/edit';
-          },
-        });
-    },
+    exec: saveCode,
     readOnly: false // false if this command should not apply in readOnly mode
 });
 

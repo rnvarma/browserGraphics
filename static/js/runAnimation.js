@@ -12,10 +12,11 @@ $(document).keydown(function(event) {
 
 data.width = canvas.width()
 data.height = canvas.height()
+data.framesSkip = 20;
 
 init(data)
 two.bind('update', function(frameCount) {
-    if (frameCount % 20 == 0) {
+    if (frameCount % data.framesSkip == 0) {
         data.width = canvas.width()
         data.height = canvas.height()
         // circle.translation.set(circle.translation._x + 1, circle.translation._y)

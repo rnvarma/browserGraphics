@@ -12,11 +12,29 @@ class HomePage(View):
 
 class SaveCode(View):
     def post(self, request):
+        uuid = request.POST.get('uuid')
         code = request.POST.get('code')
-        p = Program(code=code)
+        pw = request.POST.get('password')
+        p = Program.objects.filter(uuid=uuid)
+        if p.count() == 0:
+            p = Program.objects.filter(urlHash=uuid)
+            if p.count() == 0:
+                p = Program(code=code, urlHash=uuid, password=pw)
+            else:
+                p = p.first()
+        else:
+            p = p.first()
+        p.code = code
         p.save()
-        print p.uuid
-        return HttpResponse({p.uuid: p.uuid})
+        return HttpResponse(uuid)
+
+class CheckName(View):
+    def post(self, request):
+        name = request.POST.get('name')
+        p = Program.objects.filter(urlHash=name)
+        if (p.count() > 0):
+            return HttpResponse(True)
+        return HttpResponse(False)
 
 class RunCode(View):
     def get(self, request, uuid):

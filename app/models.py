@@ -10,3 +10,4 @@ class Program(models.Model):
     uuid = ShortUUIDField(editable=False)
     urlHash = models.CharField(max_length=200, default="")
     code = models.TextField(default="")
+    password = models.CharField(max_length=200, default="")
