@@ -26,14 +26,14 @@ function runCode(editor) {
 }
 
 editor.commands.addCommand({
-    name: 'myCommand',
+    name: 'build',
     bindKey: {win: 'Ctrl-B',  mac: 'Command-B'},
     exec: runCode,
     readOnly: false // false if this command should not apply in readOnly mode
 });
 
 editor.commands.addCommand({
-    name: 'myCommand',
+    name: 'save',
     bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
     exec: function(editor) {
         $.ajax({

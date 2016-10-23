@@ -17,7 +17,7 @@ function create_oval(x1, y1, x2, y2, options) {
 
 function create_rect(x1, y1, x2, y2, options) {
     if (options === undefined) options = {};
-    var obj = two.makeRectangle(x1, y1, x2 - x1, y2 - y1);
+    var obj = two.makeRectangle((x2 + x1) / 2, (y2 + y1)/2, x2 - x1, y2 - y1);
     if (options.fill !== undefined) obj.fill = options.fill;
     if (options.outlineColor !== undefined) obj.stroke = options.outlineColor;
     if (options.outline !== undefined) obj.linewidth = options.outline;
