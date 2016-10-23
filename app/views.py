@@ -24,6 +24,8 @@ class SaveCode(View):
                 p = p.first()
         else:
             p = p.first()
+        if p.password != pw:
+            return HttpResponse(False)
         p.code = code
         p.save()
         return HttpResponse(uuid)
@@ -33,6 +35,20 @@ class CheckName(View):
         name = request.POST.get('name')
         p = Program.objects.filter(urlHash=name)
         if (p.count() > 0):
+            return HttpResponse(True)
+        return HttpResponse(False)
+
+class VerifyPassword(View):
+    def post(self, request):
+        pw = request.POST.get('password')
+        uuid = request.POST.get('uuid')
+        program = Program.objects.filter(uuid=uuid)
+        if program.count() == 0:
+            program = Program.objects.filter(urlHash=uuid)
+            if program.count() == 0:
+                return HttpResponseRedirect('/')
+        program = program.first()
+        if program.password == pw:
             return HttpResponse(True)
         return HttpResponse(False)
 

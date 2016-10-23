@@ -88,6 +88,7 @@
         <div id="canvas"></div>
         <div id="click-layer"></div>
         <div id="uuid" data-uuid="{{uuid}}"></div>
+        <div id="pw" data-pw=""></div>
         <div class="modal fade" tabindex="-1" id="myModal" role="dialog" aria-labelledby="gridSystemModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -97,14 +98,14 @@
               </div>
               <div class="modal-body">
                 <div class="row">
-                  <div class="col-md-10 col-md-2-offset">
-                      <form class="form-inline">
+                  <div class="col-md-10 col-md-1-offset">
+                      <form class="form-inline saveForm">
                           <div class="form-group has-error">
                             <label for="exampleInputEmail1">browsergraphics.com/</label>
                             <input type="text" class="form-control" id="program-name" placeholder="cool-name">
                           </div>
                       </form>
-                      <form class="form-horizontal">
+                      <form class="form-horizontal saveForm">
                           <div class="form-group">
                             <label for="password" class="col-sm-2 control-label">Password</label>
                             <div class="col-sm-10">
@@ -126,13 +127,30 @@
           Launch demo modal
         </button>
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#passwordModal">Small modal</button>
+        <button type="button" class="btn btn-primary" id="passwordModalBtn" data-toggle="modal" data-target="#passwordModal" style="display:none;">Small modal</button>
 
-        <div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="passwordModal">
-          <div class="modal-dialog modal-sm" role="document">
+        <div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="passwordModal" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                Password Please
+                <h4 class="modal-title" id="gridSystemModalLabel">Enter the Password</h4>
+              </div>
+              <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-10 col-md-1-offset">
+                        <form class="form-horizontal pw-form">
+                          <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">Password</label>
+                            <div class="col-sm-10">
+                              <input type="password" class="form-control" id="enter-pw" placeholder="**********">
+                            </div>
+                          </div>
+                        </form>
+                    </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="pwModalBtn" class="btn btn-primary">Submit</button>
               </div>
             </div>
           </div>

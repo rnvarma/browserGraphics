@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^$', HomePage.as_view()),
     url(r'^save$', csrf_exempt(SaveCode.as_view())),
     url(r'^checkname$', csrf_exempt(CheckName.as_view())),
+    url(r'^verifypw$', csrf_exempt(VerifyPassword.as_view())),
     url(r'^(?P<uuid>[a-zA-Z0-9_.-]+)$', RunCode.as_view()),
     url(r'^(?P<uuid>[a-zA-Z0-9_.-]+)/edit$', EditCode.as_view()),
 ]

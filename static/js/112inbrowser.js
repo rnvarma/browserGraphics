@@ -39,10 +39,11 @@ function saveCode(editor) {
       },
       data: {
         code: editor.getValue(),
-        uuid: givenuuid
+        uuid: givenuuid,
+        password: $("#pw").attr("data-pw")
       },
       success: function(uuid) {
-        console.log("saved!");
+        if (uuid == "False") window.location.href = "/"
       },
     });
   }
@@ -79,9 +80,9 @@ $(document).ready(function() {
     });
   });
 
-  $("#saveModalSaveBtn").click(function() {
+  function saveFormSubmit(e) {
+    e.preventDefault()
     if (!$("#program-name").parent().hasClass("has-error")) {
-      console.log($("#program-name").val());
       $.ajax({
         type: "POST",
         url: '/save',
@@ -95,7 +96,47 @@ $(document).ready(function() {
         },
       });
     }
-  })
+  }
+
+  $(".saveForm").submit(saveFormSubmit)
+  $("#saveModalSaveBtn").click(saveFormSubmit);
+
+  var givenuuid = $("#uuid").attr("data-uuid");
+
+
+  if (givenuuid) {
+    $("#passwordModalBtn").click();
+
+    function pwformSubmit(e) {
+      e.preventDefault()
+      var pw = $("#enter-pw").val();
+      if (!pw) {
+        $("#enter-pw").parent().parent().addClass("has-error");
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: '/verifypw',
+        data: {
+          uuid: givenuuid,
+          password: pw,
+        },
+        success: function(verified) {
+          if (verified == "True") {
+            $("#passwordModal").modal("hide");
+            $("#pw").attr("data-pw", pw);
+          } else{
+            console.log("failed")
+            $("#enter-pw").parent().parent().addClass("has-error");
+          }
+        },
+      });
+    }
+
+    $("#pwModalBtn").click(pwformSubmit)
+    $(".pw-form").submit(pwformSubmit)
+  }
 })
 
 
